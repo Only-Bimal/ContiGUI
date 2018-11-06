@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContigUI", "ContigUI\ContigUI.csproj", "{739B3157-DE1A-44FF-B789-18CAF968C000}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{739B3157-DE1A-44FF-B789-18CAF968C000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{739B3157-DE1A-44FF-B789-18CAF968C000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{739B3157-DE1A-44FF-B789-18CAF968C000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{739B3157-DE1A-44FF-B789-18CAF968C000}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {148032E9-BA2D-42BC-9375-B18D6B1ED22E}
+	EndGlobalSection
+EndGlobal
