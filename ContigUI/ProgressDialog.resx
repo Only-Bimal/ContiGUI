@@ -117,46 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="AddFile_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAB0SURBVDhP7Y4xDoAgDEU9lINzD8fgJTyiunTFfALmAzXU
-        xcmfvIS0+a9MJaoamTz2B6VlnROvBHyVBQO2XK8vt2AnIhUhhFoyEhz7eWNK8iPBxYIlYEn6BdIKuGgJ
-        QCdgLAHTCUowxNIqMb/gC4GHR4EfjRe1oHCao2evrwAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="Exit_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADPSURBVDhPrZO9DYMwEIUZKSNE9AzANqloMwIjUDAFPQPQ
-        uaQBU17us2wrJm5ieNITp3uP+7GhuhXHcTyttYNSThzQvC2Pfd/7ZVmk6zppmkbqunYkJoemhd7engJh
-        nmdnbttWxnGUaZocicmh4fkpwmhUD52MMatO8yIPif0akck6mhh4kS4ar9u2PbwUQR4PK/FMfFSkO6PS
-        zSW/gB6YLYJAkn1zJx30M0ORewpcXSEeIjfw9yEy9qVrBGrqiz+kAITiTzmA0dRU9jOVoao+KCfcbaEK
-        O7YAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="AddFolder_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAB7SURBVDhPY/j//z8Yf/v27T8yhomDMF4AUwTSZNFlAsYkGYBsK7IBMEyUATCN6BhqSAHMMGyY
-        GAPe39/X9f/OtioMDDcAhtE0gvGbeyfAij+8/4iC4QbAAgrdAGSbcGEMA5AxNg3oGMMAbIrw4VEDaGEA
-        ORhuAHn4PwMAUWruHpXWcTgAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="PlayVideo_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABwSURBVDhPYxh48PXr14Zv3779JweD9DKAGL6+vv+dnJxI
-        wiA9IL1gA7ApIAbjNeDWzdv/83LzsMrBMF4DPrz/CMa7du76HxERgVUNUQaA8NMnz/7PnDkLQw19DCDb
-        CxQHIjEYbgBFCYnipDzAgIEBAAz84iZcm/6rAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Contig" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Contig.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Contig64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Contig64.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>
