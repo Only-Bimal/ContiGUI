@@ -63,52 +63,29 @@ namespace ContigUI
 
 		public string ProgramFileName
 		{
-			get
-			{
-				return _processStartInfo.FileName;
-			}
-
-			set
-			{
-				_processStartInfo.FileName = value;
-			}
+			get => _processStartInfo.FileName;
+			set => _processStartInfo.FileName = value;
 		}
 
 		/// <summary>The command-line arguments passed to the executable when run. </summary>
-
 		public string Arguments
 		{
-			get
-			{
-				return _processStartInfo.Arguments;
-			}
-
-			set
-			{
-				_processStartInfo.Arguments = value;
-			}
+			get => _processStartInfo.Arguments;
+			set => _processStartInfo.Arguments = value;
 		}
 
 		/// <summary>The working directory set for the executable when run.</summary>
 
 		public string WorkingDirectory
 		{
-			get
-			{
-				return _processStartInfo.WorkingDirectory;
-			}
-
-			set
-			{
-				_processStartInfo.WorkingDirectory = value;
-			}
+			get => _processStartInfo.WorkingDirectory;
+			set => _processStartInfo.WorkingDirectory = value;
 		}
 
 		/// <summary>
 		/// The file to be used if standard input is redirected,
 		/// or null or string.Empty to not redirect standard input.
 		/// </summary>
-
 		public string StandardInputFileName
 		{
 			set
@@ -116,18 +93,13 @@ namespace ContigUI
 				_standardInputFileName = value;
 				_processStartInfo.RedirectStandardInput = !string.IsNullOrEmpty(value);
 			}
-
-			get
-			{
-				return _standardInputFileName;
-			}
+			get => _standardInputFileName;
 		}
 
 		/// <summary>
 		/// The file to be used if standard output is redirected,
 		/// or null or string.Empty to not redirect standard output.
 		/// </summary>
-
 		public string StandardOutputFileName
 		{
 			set
@@ -135,18 +107,13 @@ namespace ContigUI
 				_standardOutputFileName = value;
 				_processStartInfo.RedirectStandardOutput = !string.IsNullOrEmpty(value);
 			}
-
-			get
-			{
-				return _standardOutputFileName;
-			}
+			get => _standardOutputFileName;
 		}
 
 		/// <summary>
 		/// The file to be used if standard error is redirected,
 		/// or null or string.Empty to not redirect standard error.
 		/// </summary>
-
 		public string StandardErrorFileName
 		{
 			set
@@ -154,11 +121,7 @@ namespace ContigUI
 				_standardErrorFileName = value;
 				_processStartInfo.RedirectStandardError = !string.IsNullOrEmpty(value);
 			}
-
-			get
-			{
-				return _standardErrorFileName;
-			}
+			get => _standardErrorFileName;
 		}
 
 		#endregion  // Public Properties
@@ -167,21 +130,17 @@ namespace ContigUI
 
 		/// <summary>Add a set of name-value pairs into the set of environment variables available to the executable.</summary>
 		/// <param name="variables">The name-value pairs to add.</param>
-
 		public void AddEnvironmentVariables(StringDictionary variables)
 		{
-			if (variables == null)
-				throw new ArgumentNullException("variables");
+			if (variables == null) { throw new ArgumentNullException(nameof(variables)); }
 
 			StringDictionary environmentVariables = _processStartInfo.EnvironmentVariables;
 
-			foreach (DictionaryEntry e in variables)
-				environmentVariables[(string)e.Key] = (string)e.Value;
+			foreach (DictionaryEntry e in variables) { environmentVariables[(string)e.Key] = (string)e.Value; }
 		}
 
 		/// <summary>Run the executable and wait until the it has terminated.</summary>
 		/// <returns>The exit code returned from the executable.</returns>
-
 		public int Run()
 		{
 			Thread standardInputThread = null;

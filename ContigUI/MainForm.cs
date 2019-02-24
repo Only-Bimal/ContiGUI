@@ -24,7 +24,7 @@ namespace ContigUI
 		{
 			InitializeComponent();
 #if DEBUG == false
-			AdminRelauncher();
+			RunAsAdmin();
 #endif
 			DriveListView.Items.Clear();
 			FolderListView.Items.Clear();
@@ -143,13 +143,13 @@ namespace ContigUI
 				fileParameters.Add(item.Text);
 			}
 
-			Hide();
+			//Hide();
 			foreach (var folder in folderParameters)
 			{
 				process.Arguments = "-v -s " + Path.Combine(folder, "*.*");
 				//process.StandardErrorFileName = folderFileName;
 				process.StandardOutputFileName = folderFileName;
-				(new ProgressDialog()).ShowDialog(this);
+				//new ProgressDialog().ShowDialog(this);
 				process.Run();
 			}
 
@@ -169,133 +169,10 @@ namespace ContigUI
 				process.Run();
 			}
 
-			MessageBox.Show("Process Complete","ContiGUI",MessageBoxButtons.OK,MessageBoxIcon.Information);
-			Show();
+			MessageBox.Show("Process Complete", "ContiGUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			//Show();
 		}
 
-		private string GetContigPath()
-		{
-			// Find if contig is available in any of the path
-			var contigPath = GetFullPathFromWindows("contig.exe");
-
-			if (string.IsNullOrWhiteSpace(contigPath))
-			{
-				//var message = "Unable to find \"Contig\". Would you like to provide the path of Contig yourself?" +
-				//	"\n\nIf you choose \"No\" : Embedded verion of contig will be used (Currently 1.8)" +
-				//	"\n\nIf you choose \"Cancel\" : Operation will be cancelled";
-				//var result = MessageBox.Show(message, "Contig Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Stop);
-				//switch (result)
-				//{
-				//	case DialogResult.Yes:
-				//		// Open File dialog
-				//		var contigDialog = new OpenFileDialog
-				//		{
-				//			Filter = "Contig Application|Contig.exe|All Files|*.*",
-				//			Multiselect = false,
-				//			AddExtension = true,
-				//			AutoUpgradeEnabled = true,
-				//			CheckFileExists = true,
-				//			CheckPathExists = true,
-				//			DereferenceLinks = true,
-				//			FileName = "Contig.exe",
-				//			SupportMultiDottedExtensions = true,
-				//			Title = "Select path of Contig...",
-				//			ValidateNames = true
-				//		};
-
-				//		result = contigDialog.ShowDialog();
-				//		if (result == DialogResult.OK)
-				//		{
-				//			contigPath = contigDialog.FileName;
-				//			if (!AuthenticodeTools.IsTrusted(contigPath))
-				//			{
-				//				MessageBox.Show("Unable to verify the signature of the file. Cannot use it.", "Unverified File");
-				//				contigPath = null;
-				//			}
-				//		}
-				//		break;
-				//	case DialogResult.Cancel: contigPath = null; break;
-				//	case DialogResult.No:
-				//		// Prepare Contig Path
-				//		contigPath = Path.Combine(Path.GetTempPath(), "Contig.exe");
-				//		// Extract the Contig from here to temp
-				//		File.WriteAllBytes(contigPath, Properties.Resources.Contig);
-				//		break;
-				//	default: break;
-				//}
-				// Prepare Contig Path
-				contigPath = Path.Combine(Path.GetTempPath(), "Contig.exe");
-				// Extract the Contig from here to temp
-				File.WriteAllBytes(contigPath, Properties.Resources.Contig);
-			}
-			return contigPath;
-		}
-
-		/// <summary>
-		/// Gets the full path of the given executable filename as if the user had entered this
-		/// executable in a shell. So, for example, the Windows PATH environment variable will
-		/// be examined. If the filename can't be found by Windows, null is returned.</summary>
-		/// <param name="exeName"></param>
-		/// <returns>The full path if successful, or null otherwise.</returns>
-		public static string GetFullPathFromWindows(string exeName)
-		{
-			if (exeName.Length >= MAX_PATH) { throw new ArgumentException($"The executable name '{exeName}' must have less than {MAX_PATH} characters.", nameof(exeName)); }
-
-			StringBuilder sb = new StringBuilder(exeName, MAX_PATH);
-			return PathFindOnPath(sb, null) ? sb.ToString() : null;
-		}
-
-		// https://docs.microsoft.com/en-us/windows/desktop/api/shlwapi/nf-shlwapi-pathfindonpathw
-		// https://www.pinvoke.net/default.aspx/shlwapi.PathFindOnPath
-		[DllImport("shlwapi.dll", CharSet = CharSet.Unicode, SetLastError = false)]
-		static extern bool PathFindOnPath([In, Out] StringBuilder pszFile, [In] string[] ppszOtherDirs);
-
-		// from MAPIWIN.h :
-		private const int MAX_PATH = 260;
-
-		private void AdminRelauncher()
-		{
-			var message = "This application requires administrative privileges to perform optimally. \n\n Relaunch as Administrator";
-			if (!IsRunAsAdmin())
-			{
-				if (MessageBox.Show(message, "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) == DialogResult.Yes)
-				{
-					ProcessStartInfo proc = new ProcessStartInfo();
-					proc.UseShellExecute = true;
-					proc.WorkingDirectory = Environment.CurrentDirectory;
-					proc.FileName = Assembly.GetEntryAssembly().CodeBase;
-
-					proc.Verb = "runas";
-
-					try
-					{
-						Process.Start(proc);
-						Environment.Exit(0);
-					}
-					catch (Exception ex)
-					{
-						Console.WriteLine("This program must be run as an administrator! \n\n" + ex.ToString());
-					}
-				}
-				else
-				{
-					Environment.Exit(0);
-				}
-			}
-		}
-
-		private bool IsRunAsAdmin()
-		{
-			try
-			{
-				WindowsIdentity id = WindowsIdentity.GetCurrent();
-				WindowsPrincipal principal = new WindowsPrincipal(id);
-				return principal.IsInRole(WindowsBuiltInRole.Administrator);
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
+		
 	}
 }
