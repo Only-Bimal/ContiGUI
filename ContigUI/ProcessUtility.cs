@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-/// <summary>
-///  Based on Answer from the link https://stackoverflow.com/a/16256623/561256 by Mattthew Watson
-/// </summary>
+/*
+* Based on Answer from the link https://stackoverflow.com/a/16256623/561256 by Mattthew Watson
+*/
 namespace ContigUI
 {
 	/// <summary>
 	/// Encapsulates an executable program.
-	/// This class makes it easy to run a console app and have that app's output appear
+	/// This class makes it easy to run a console app and have that application's output appear
 	/// in the parent console's window, and to redirect input and output from/to files.
 	/// </summary>
 	/// <remarks>
@@ -29,11 +25,12 @@ namespace ContigUI
 
 	public class ProcessUtility
 	{
+		public event EventHandler ProcessCompleted;
+
 		#region Constructor
 
 		/// <summary>Runs the specified program file name.</summary>
 		/// <param name="programFileName">Name of the program file to run.</param>
-
 		public ProcessUtility(string programFileName)
 		{
 			ProgramFileName = programFileName;
@@ -134,7 +131,7 @@ namespace ContigUI
 		{
 			if (variables == null) { throw new ArgumentNullException(nameof(variables)); }
 
-			StringDictionary environmentVariables = _processStartInfo.EnvironmentVariables;
+			var environmentVariables = _processStartInfo.EnvironmentVariables;
 
 			foreach (DictionaryEntry e in variables) { environmentVariables[(string)e.Key] = (string)e.Value; }
 		}
@@ -151,51 +148,61 @@ namespace ContigUI
 			_standardError = null;
 			_standardOutput = null;
 
-			int exitCode = -1;
+			var exitCode = -1;
 
 			try
 			{
-				using (Process process = new Process())
+				using (var process = new Process())
 				{
 					process.StartInfo = _processStartInfo;
+					process.EnableRaisingEvents = true;
+					process.Exited += Process_Exited;
 					process.Start();
 
 					if (process.StartInfo.RedirectStandardInput)
 					{
 						_standardInput = process.StandardInput;
-						standardInputThread = startThread(new ThreadStart(supplyStandardInput), "StandardInput");
+						standardInputThread = StartThread(new ThreadStart(SupplyStandardInput), "StandardInput");
 					}
 
 					if (process.StartInfo.RedirectStandardError)
 					{
 						_standardError = process.StandardError;
-						standardErrorThread = startThread(new ThreadStart(writeStandardError), "StandardError");
+						standardErrorThread = StartThread(new ThreadStart(WriteStandardError), "StandardError");
 					}
 
 					if (process.StartInfo.RedirectStandardOutput)
 					{
 						_standardOutput = process.StandardOutput;
-						standardOutputThread = startThread(new ThreadStart(writeStandardOutput), "StandardOutput");
+						standardOutputThread = StartThread(new ThreadStart(WriteStandardOutput), "StandardOutput");
 					}
-
-					process.WaitForExit();
-					exitCode = process.ExitCode;
+					
+					//process.WaitForExit();
+					//exitCode = process.ExitCode;
 				}
 			}
 
 			finally  // Ensure that the threads do not persist beyond the process being run
 			{
-				if (standardInputThread != null)
-					standardInputThread.Join();
+				standardInputThread?.Join();
 
-				if (standardOutputThread != null)
-					standardOutputThread.Join();
+				standardOutputThread?.Join();
 
-				if (standardErrorThread != null)
-					standardErrorThread.Join();
+				standardErrorThread?.Join();
 			}
 
 			return exitCode;
+		}
+
+		private void Process_Exited(object sender, EventArgs e)
+		{
+			OnProcessCompleted(e);
+		}
+
+		protected virtual void OnProcessCompleted(EventArgs e)
+		{
+			EventHandler handler = ProcessCompleted;
+			handler?.Invoke(this, e);
 		}
 
 		#endregion  // Public Methods
@@ -207,30 +214,32 @@ namespace ContigUI
 		/// <param name="name">name of the thread</param>
 		/// <returns>thread object</returns>
 
-		private static Thread startThread(ThreadStart startInfo, string name)
+		private static Thread StartThread(ThreadStart startInfo, string name)
 		{
-			Thread t = new Thread(startInfo);
-			t.IsBackground = true;
-			t.Name = name;
+			var t = new Thread(startInfo)
+			{
+				IsBackground = true,
+				Name = name
+			};
 			t.Start();
 			return t;
 		}
 
 		/// <summary>Thread which supplies standard input from the appropriate file to the running executable.</summary>
 
-		private void supplyStandardInput()
+		private void SupplyStandardInput()
 		{
 			// feed text from the file a line at a time into the standard input stream
 
-			using (StreamReader reader = File.OpenText(_standardInputFileName))
+			using (var reader = File.OpenText(_standardInputFileName))
 			{
-				using (StreamWriter writer = _standardInput)
+				using (var writer = _standardInput)
 				{
 					writer.AutoFlush = true;
 
 					for (; ; )
 					{
-						string textLine = reader.ReadLine();
+						var textLine = reader.ReadLine();
 
 						if (textLine == null)
 							break;
@@ -243,17 +252,17 @@ namespace ContigUI
 
 		/// <summary>Thread which outputs standard output from the running executable to the appropriate file.</summary>
 
-		private void writeStandardOutput()
+		private void WriteStandardOutput()
 		{
-			using (StreamWriter writer = File.CreateText(_standardOutputFileName))
+			using (var writer = File.CreateText(_standardOutputFileName))
 			{
-				using (StreamReader reader = _standardOutput)
+				using (var reader = _standardOutput)
 				{
 					writer.AutoFlush = true;
 
 					for (; ; )
 					{
-						string textLine = reader.ReadLine();
+						var textLine = reader.ReadLine();
 
 						if (textLine == null) break;
 
@@ -264,7 +273,7 @@ namespace ContigUI
 
 			if (File.Exists(_standardOutputFileName))
 			{
-				FileInfo info = new FileInfo(_standardOutputFileName);
+				var info = new FileInfo(_standardOutputFileName);
 
 				// if the error info is empty or just contains eof etc.
 
@@ -274,17 +283,17 @@ namespace ContigUI
 
 		/// <summary>Thread which outputs standard error output from the running executable to the appropriate file.</summary>
 
-		private void writeStandardError()
+		private void WriteStandardError()
 		{
-			using (StreamWriter writer = File.CreateText(_standardErrorFileName))
+			using (var writer = File.CreateText(_standardErrorFileName))
 			{
-				using (StreamReader reader = _standardError)
+				using (var reader = _standardError)
 				{
 					writer.AutoFlush = true;
 
 					for (; ; )
 					{
-						string textLine = reader.ReadLine();
+						var textLine = reader.ReadLine();
 
 						if (textLine == null)
 							break;
@@ -296,7 +305,7 @@ namespace ContigUI
 
 			if (File.Exists(_standardErrorFileName))
 			{
-				FileInfo info = new FileInfo(_standardErrorFileName);
+				var info = new FileInfo(_standardErrorFileName);
 
 				// if the error info is empty or just contains eof etc.
 

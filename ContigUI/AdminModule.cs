@@ -1,54 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
+using System.Security.Authentication;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ContigUI
 {
-	public class AdminModule
+	public static class AdminModule
 	{
-		private void RunAsAdmin()
+		public static void RunAsAdmin()
 		{
 			var message = "This application requires administrative privileges to perform optimally. \n\n Relaunch as Administrator";
-			if (!IsRunAsAdmin())
+			
+			if (IsRunAsAdmin()) return;
+
+			if (MessageBox.Show(message, "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) == DialogResult.Yes)
 			{
-				if (MessageBox.Show(message, "Elevation required", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) == DialogResult.Yes)
+				var proc = new ProcessStartInfo
 				{
-					ProcessStartInfo proc = new ProcessStartInfo();
-					proc.UseShellExecute = true;
-					proc.WorkingDirectory = Environment.CurrentDirectory;
-					proc.FileName = Assembly.GetEntryAssembly().CodeBase;
+					UseShellExecute = true,
+					WorkingDirectory = Environment.CurrentDirectory,
+					FileName = Assembly.GetEntryAssembly()?.CodeBase ?? throw new InvalidOperationException("Unable to find/access the path of the application."),
 
-					proc.Verb = "runas";
+					Verb = "runas"
+				};
 
-					try
-					{
-						Process.Start(proc);
-						Environment.Exit(0);
-					}
-					catch (Exception ex)
-					{
-						Console.WriteLine("This program must be run as an administrator! \n\n" + ex.ToString());
-					}
-				}
-				else
+				try
 				{
+					Process.Start(proc);
 					Environment.Exit(0);
 				}
+				catch (Exception ex)
+				{
+					throw new InvalidCredentialException($"This program must be run as an administrator! \n\n{ex}", ex);
+				}
+			}
+			else
+			{
+				Environment.Exit(0);
 			}
 		}
 
-		private bool IsRunAsAdmin()
+		private static bool IsRunAsAdmin()
 		{
 			try
 			{
-				WindowsIdentity id = WindowsIdentity.GetCurrent();
-				WindowsPrincipal principal = new WindowsPrincipal(id);
+				var id = WindowsIdentity.GetCurrent();
+				var principal = new WindowsPrincipal(id);
 				return principal.IsInRole(WindowsBuiltInRole.Administrator);
 			}
 			catch (Exception)

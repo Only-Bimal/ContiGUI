@@ -30,11 +30,12 @@
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "C:",
+            "Solid state drive",
             "150 GB"}, "HardDrive");
 			this.DriveImageList = new System.Windows.Forms.ImageList(this.components);
-			this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
+			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,8 +46,9 @@
 			this.MainContainer = new System.Windows.Forms.SplitContainer();
 			this.OptionsTabControl = new System.Windows.Forms.TabControl();
 			this.DiskTabPage = new System.Windows.Forms.TabPage();
+			this.driveSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.DriveListView = new System.Windows.Forms.ListView();
-			this.DriveNameCOlumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.DriveNameColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.DriveSizeColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.FolderTabPage = new System.Windows.Forms.TabPage();
 			this.FoldersSplitContainer = new System.Windows.Forms.SplitContainer();
@@ -60,6 +62,7 @@
 			this.FileNameCOlumnHEader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.RemoveFilesButton = new System.Windows.Forms.Button();
 			this.FileBrowserButton = new System.Windows.Forms.Button();
+			this.progressIndicator = new System.Windows.Forms.ProgressBar();
 			this.ExitButton = new System.Windows.Forms.Button();
 			this.startButton = new System.Windows.Forms.Button();
 			this.MainToolStrip = new System.Windows.Forms.ToolStrip();
@@ -67,9 +70,18 @@
 			this.addFolderStripButton = new System.Windows.Forms.ToolStripButton();
 			this.StartStripButton = new System.Windows.Forms.ToolStripButton();
 			this.ExitStripButton = new System.Windows.Forms.ToolStripButton();
-			this.driveSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.progressIndicator = new System.Windows.Forms.ProgressBar();
-			this.MainMenuStrip.SuspendLayout();
+			this.driveLogListView = new System.Windows.Forms.ListView();
+			this.DriveTypeColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.ItemColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.BeforeColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.AfterColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.removeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.sep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.removeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.MainMenu.SuspendLayout();
 			this.MainToolStripContainer.ContentPanel.SuspendLayout();
 			this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
 			this.MainToolStripContainer.SuspendLayout();
@@ -79,6 +91,10 @@
 			this.MainContainer.SuspendLayout();
 			this.OptionsTabControl.SuspendLayout();
 			this.DiskTabPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.driveSplitContainer)).BeginInit();
+			this.driveSplitContainer.Panel1.SuspendLayout();
+			this.driveSplitContainer.Panel2.SuspendLayout();
+			this.driveSplitContainer.SuspendLayout();
 			this.FolderTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.FoldersSplitContainer)).BeginInit();
 			this.FoldersSplitContainer.Panel1.SuspendLayout();
@@ -90,9 +106,6 @@
 			this.FilesSplitContainer.Panel2.SuspendLayout();
 			this.FilesSplitContainer.SuspendLayout();
 			this.MainToolStrip.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.driveSplitContainer)).BeginInit();
-			this.driveSplitContainer.Panel1.SuspendLayout();
-			this.driveSplitContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// DriveImageList
@@ -109,18 +122,19 @@
 			this.DriveImageList.Images.SetKeyName(7, "Start");
 			this.DriveImageList.Images.SetKeyName(8, "Exit");
 			// 
-			// MainMenuStrip
+			// MainMenu
 			// 
-			this.MainMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-			this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.MainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.helpToolStripMenuItem});
-			this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
-			this.MainMenuStrip.Name = "MainMenuStrip";
-			this.MainMenuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-			this.MainMenuStrip.Size = new System.Drawing.Size(875, 24);
-			this.MainMenuStrip.TabIndex = 1;
-			this.MainMenuStrip.Text = "Main Menu";
+			this.MainMenu.Location = new System.Drawing.Point(0, 0);
+			this.MainMenu.Name = "MainMenu";
+			this.MainMenu.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+			this.MainMenu.Size = new System.Drawing.Size(875, 24);
+			this.MainMenu.TabIndex = 1;
+			this.MainMenu.Text = "Main Menu";
 			// 
 			// fileToolStripMenuItem
 			// 
@@ -135,7 +149,7 @@
 			this.exitToolStripMenuItem.Image = global::ContigUI.Properties.Resources.Exit_16x;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitButton_Click);
 			// 
@@ -150,7 +164,7 @@
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.aboutToolStripMenuItem.Text = "&About";
 			// 
 			// FolderDialog
@@ -167,6 +181,10 @@
 			// 
 			// MainToolStripContainer
 			// 
+			// 
+			// MainToolStripContainer.BottomToolStripPanel
+			// 
+			this.MainToolStripContainer.BottomToolStripPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.MainToolStripContainer_BottomToolStripPanel_ControlAdded);
 			this.MainToolStripContainer.BottomToolStripPanelVisible = false;
 			// 
 			// MainToolStripContainer.ContentPanel
@@ -174,8 +192,16 @@
 			this.MainToolStripContainer.ContentPanel.Controls.Add(this.MainContainer);
 			this.MainToolStripContainer.ContentPanel.Size = new System.Drawing.Size(875, 478);
 			this.MainToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+			// 
+			// MainToolStripContainer.LeftToolStripPanel
+			// 
+			this.MainToolStripContainer.LeftToolStripPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.MainToolStripContainer_LeftToolStripPanel_ControlAdded);
 			this.MainToolStripContainer.Location = new System.Drawing.Point(0, 24);
 			this.MainToolStripContainer.Name = "MainToolStripContainer";
+			// 
+			// MainToolStripContainer.RightToolStripPanel
+			// 
+			this.MainToolStripContainer.RightToolStripPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.MainToolStripContainer_RightToolStripPanel_ControlAdded);
 			this.MainToolStripContainer.Size = new System.Drawing.Size(875, 503);
 			this.MainToolStripContainer.TabIndex = 2;
 			this.MainToolStripContainer.Text = "MainToolStrip";
@@ -183,6 +209,7 @@
 			// MainToolStripContainer.TopToolStripPanel
 			// 
 			this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainToolStrip);
+			this.MainToolStripContainer.TopToolStripPanel.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.MainToolStripContainer_TopToolStripPanel_ControlAdded);
 			// 
 			// MainContainer
 			// 
@@ -204,7 +231,7 @@
 			this.MainContainer.Panel2.Controls.Add(this.ExitButton);
 			this.MainContainer.Panel2.Controls.Add(this.startButton);
 			this.MainContainer.Size = new System.Drawing.Size(875, 478);
-			this.MainContainer.SplitterDistance = 386;
+			this.MainContainer.SplitterDistance = 414;
 			this.MainContainer.SplitterWidth = 5;
 			this.MainContainer.TabIndex = 1;
 			// 
@@ -219,7 +246,7 @@
 			this.OptionsTabControl.Multiline = true;
 			this.OptionsTabControl.Name = "OptionsTabControl";
 			this.OptionsTabControl.SelectedIndex = 0;
-			this.OptionsTabControl.Size = new System.Drawing.Size(873, 384);
+			this.OptionsTabControl.Size = new System.Drawing.Size(873, 412);
 			this.OptionsTabControl.TabIndex = 0;
 			// 
 			// DiskTabPage
@@ -228,36 +255,56 @@
 			this.DiskTabPage.Location = new System.Drawing.Point(4, 24);
 			this.DiskTabPage.Name = "DiskTabPage";
 			this.DiskTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.DiskTabPage.Size = new System.Drawing.Size(865, 356);
+			this.DiskTabPage.Size = new System.Drawing.Size(865, 384);
 			this.DiskTabPage.TabIndex = 0;
 			this.DiskTabPage.Text = "Disk Drives";
 			this.DiskTabPage.UseVisualStyleBackColor = true;
 			// 
+			// driveSplitContainer
+			// 
+			this.driveSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.driveSplitContainer.Location = new System.Drawing.Point(3, 3);
+			this.driveSplitContainer.Name = "driveSplitContainer";
+			this.driveSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// driveSplitContainer.Panel1
+			// 
+			this.driveSplitContainer.Panel1.Controls.Add(this.DriveListView);
+			// 
+			// driveSplitContainer.Panel2
+			// 
+			this.driveSplitContainer.Panel2.Controls.Add(this.driveLogListView);
+			this.driveSplitContainer.Size = new System.Drawing.Size(859, 378);
+			this.driveSplitContainer.SplitterDistance = 102;
+			this.driveSplitContainer.TabIndex = 1;
+			// 
 			// DriveListView
 			// 
-			this.DriveListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.DriveListView.CheckBoxes = true;
 			this.DriveListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.DriveNameCOlumnHeader,
+            this.DriveNameColumnHeader,
+            this.DriveTypeColumnHeader,
             this.DriveSizeColumnHeader});
+			this.DriveListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.DriveListView.FullRowSelect = true;
+			this.DriveListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.DriveListView.HideSelection = false;
-			listViewItem2.StateImageIndex = 0;
+			listViewItem1.StateImageIndex = 0;
 			this.DriveListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-			this.DriveListView.Location = new System.Drawing.Point(3, 3);
+            listViewItem1});
+			this.DriveListView.Location = new System.Drawing.Point(0, 0);
 			this.DriveListView.Name = "DriveListView";
-			this.DriveListView.Size = new System.Drawing.Size(859, 293);
+			this.DriveListView.Size = new System.Drawing.Size(859, 102);
 			this.DriveListView.SmallImageList = this.DriveImageList;
 			this.DriveListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.DriveListView.TabIndex = 0;
 			this.DriveListView.UseCompatibleStateImageBehavior = false;
 			this.DriveListView.View = System.Windows.Forms.View.Details;
 			// 
-			// DriveNameCOlumnHeader
+			// DriveNameColumnHeader
 			// 
-			this.DriveNameCOlumnHeader.Text = "Disk Drive";
-			this.DriveNameCOlumnHeader.Width = 120;
+			this.DriveNameColumnHeader.Text = "Drive";
+			this.DriveNameColumnHeader.Width = 120;
 			// 
 			// DriveSizeColumnHeader
 			// 
@@ -270,7 +317,7 @@
 			this.FolderTabPage.Location = new System.Drawing.Point(4, 24);
 			this.FolderTabPage.Name = "FolderTabPage";
 			this.FolderTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.FolderTabPage.Size = new System.Drawing.Size(865, 356);
+			this.FolderTabPage.Size = new System.Drawing.Size(865, 384);
 			this.FolderTabPage.TabIndex = 1;
 			this.FolderTabPage.Text = "Folders";
 			this.FolderTabPage.UseVisualStyleBackColor = true;
@@ -292,8 +339,8 @@
 			// 
 			this.FoldersSplitContainer.Panel2.Controls.Add(this.RemoveFolderButton);
 			this.FoldersSplitContainer.Panel2.Controls.Add(this.FolderBrowserButton);
-			this.FoldersSplitContainer.Size = new System.Drawing.Size(859, 350);
-			this.FoldersSplitContainer.SplitterDistance = 287;
+			this.FoldersSplitContainer.Size = new System.Drawing.Size(859, 378);
+			this.FoldersSplitContainer.SplitterDistance = 324;
 			this.FoldersSplitContainer.SplitterWidth = 1;
 			this.FoldersSplitContainer.TabIndex = 0;
 			// 
@@ -306,7 +353,7 @@
 			this.FolderListView.HideSelection = false;
 			this.FolderListView.Location = new System.Drawing.Point(0, 0);
 			this.FolderListView.Name = "FolderListView";
-			this.FolderListView.Size = new System.Drawing.Size(859, 287);
+			this.FolderListView.Size = new System.Drawing.Size(859, 324);
 			this.FolderListView.SmallImageList = this.DriveImageList;
 			this.FolderListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.FolderListView.TabIndex = 1;
@@ -351,7 +398,7 @@
 			this.FileTabPage.Controls.Add(this.FilesSplitContainer);
 			this.FileTabPage.Location = new System.Drawing.Point(4, 24);
 			this.FileTabPage.Name = "FileTabPage";
-			this.FileTabPage.Size = new System.Drawing.Size(865, 356);
+			this.FileTabPage.Size = new System.Drawing.Size(865, 384);
 			this.FileTabPage.TabIndex = 2;
 			this.FileTabPage.Text = "Files";
 			this.FileTabPage.UseVisualStyleBackColor = true;
@@ -373,8 +420,8 @@
 			// 
 			this.FilesSplitContainer.Panel2.Controls.Add(this.RemoveFilesButton);
 			this.FilesSplitContainer.Panel2.Controls.Add(this.FileBrowserButton);
-			this.FilesSplitContainer.Size = new System.Drawing.Size(865, 356);
-			this.FilesSplitContainer.SplitterDistance = 287;
+			this.FilesSplitContainer.Size = new System.Drawing.Size(865, 384);
+			this.FilesSplitContainer.SplitterDistance = 324;
 			this.FilesSplitContainer.SplitterWidth = 1;
 			this.FilesSplitContainer.TabIndex = 1;
 			// 
@@ -387,7 +434,7 @@
 			this.FileListView.HideSelection = false;
 			this.FileListView.Location = new System.Drawing.Point(0, 0);
 			this.FileListView.Name = "FileListView";
-			this.FileListView.Size = new System.Drawing.Size(865, 287);
+			this.FileListView.Size = new System.Drawing.Size(865, 324);
 			this.FileListView.SmallImageList = this.DriveImageList;
 			this.FileListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.FileListView.TabIndex = 2;
@@ -427,11 +474,19 @@
 			this.FileBrowserButton.UseVisualStyleBackColor = true;
 			this.FileBrowserButton.Click += new System.EventHandler(this.FileBrowserButton_Click);
 			// 
+			// progressIndicator
+			// 
+			this.progressIndicator.Location = new System.Drawing.Point(11, 10);
+			this.progressIndicator.Name = "progressIndicator";
+			this.progressIndicator.Size = new System.Drawing.Size(663, 36);
+			this.progressIndicator.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.progressIndicator.TabIndex = 3;
+			// 
 			// ExitButton
 			// 
 			this.ExitButton.ImageKey = "Exit";
 			this.ExitButton.ImageList = this.DriveImageList;
-			this.ExitButton.Location = new System.Drawing.Point(773, 20);
+			this.ExitButton.Location = new System.Drawing.Point(773, 10);
 			this.ExitButton.Margin = new System.Windows.Forms.Padding(2);
 			this.ExitButton.Name = "ExitButton";
 			this.ExitButton.Size = new System.Drawing.Size(90, 36);
@@ -445,7 +500,7 @@
 			// 
 			this.startButton.ImageKey = "Start";
 			this.startButton.ImageList = this.DriveImageList;
-			this.startButton.Location = new System.Drawing.Point(679, 20);
+			this.startButton.Location = new System.Drawing.Point(679, 10);
 			this.startButton.Margin = new System.Windows.Forms.Padding(2);
 			this.startButton.Name = "startButton";
 			this.startButton.Size = new System.Drawing.Size(90, 36);
@@ -463,9 +518,10 @@
             this.addFolderStripButton,
             this.StartStripButton,
             this.ExitStripButton});
-			this.MainToolStrip.Location = new System.Drawing.Point(3, 0);
+			this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
 			this.MainToolStrip.Name = "MainToolStrip";
-			this.MainToolStrip.Size = new System.Drawing.Size(236, 25);
+			this.MainToolStrip.Size = new System.Drawing.Size(875, 25);
+			this.MainToolStrip.Stretch = true;
 			this.MainToolStrip.TabIndex = 0;
 			this.MainToolStrip.Text = "MainToolStrip";
 			// 
@@ -506,28 +562,88 @@
 			this.ExitStripButton.Text = "ExitStripButton";
 			this.ExitStripButton.Click += new System.EventHandler(this.ExitButton_Click);
 			// 
-			// driveSplitContainer
+			// driveLogListView
 			// 
-			this.driveSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.driveSplitContainer.IsSplitterFixed = true;
-			this.driveSplitContainer.Location = new System.Drawing.Point(3, 3);
-			this.driveSplitContainer.Name = "driveSplitContainer";
-			this.driveSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.driveLogListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ItemColumnHeader,
+            this.BeforeColumnHeader,
+            this.AfterColumnHeader});
+			this.driveLogListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.driveLogListView.FullRowSelect = true;
+			this.driveLogListView.GridLines = true;
+			this.driveLogListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.driveLogListView.HideSelection = false;
+			this.driveLogListView.Location = new System.Drawing.Point(0, 0);
+			this.driveLogListView.Name = "driveLogListView";
+			this.driveLogListView.Size = new System.Drawing.Size(859, 272);
+			this.driveLogListView.TabIndex = 0;
+			this.driveLogListView.UseCompatibleStateImageBehavior = false;
+			this.driveLogListView.View = System.Windows.Forms.View.Details;
 			// 
-			// driveSplitContainer.Panel1
+			// DriveTypeColumnHeader
 			// 
-			this.driveSplitContainer.Panel1.Controls.Add(this.DriveListView);
-			this.driveSplitContainer.Size = new System.Drawing.Size(859, 350);
-			this.driveSplitContainer.SplitterDistance = 287;
-			this.driveSplitContainer.TabIndex = 1;
+			this.DriveTypeColumnHeader.Text = "Media Type";
+			this.DriveTypeColumnHeader.Width = 130;
 			// 
-			// progressIndicator
+			// ItemColumnHeader
 			// 
-			this.progressIndicator.Location = new System.Drawing.Point(11, 20);
-			this.progressIndicator.Name = "progressIndicator";
-			this.progressIndicator.Size = new System.Drawing.Size(663, 36);
-			this.progressIndicator.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.progressIndicator.TabIndex = 3;
+			this.ItemColumnHeader.Text = "Item";
+			this.ItemColumnHeader.Width = 180;
+			// 
+			// BeforeColumnHeader
+			// 
+			this.BeforeColumnHeader.Text = "Fragments Before";
+			this.BeforeColumnHeader.Width = 130;
+			// 
+			// AfterColumnHeader
+			// 
+			this.AfterColumnHeader.Text = "Fragments After";
+			this.AfterColumnHeader.Width = 130;
+			// 
+			// editToolStripMenuItem
+			// 
+			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addFolderToolStripMenuItem,
+            this.removeFolderToolStripMenuItem,
+            this.sep1,
+            this.addFileToolStripMenuItem,
+            this.removeFileToolStripMenuItem});
+			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+			this.editToolStripMenuItem.Text = "&Edit";
+			// 
+			// addFolderToolStripMenuItem
+			// 
+			this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
+			this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.addFolderToolStripMenuItem.Text = "Add F&older...";
+			this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.FolderBrowserButton_Click);
+			// 
+			// removeFolderToolStripMenuItem
+			// 
+			this.removeFolderToolStripMenuItem.Name = "removeFolderToolStripMenuItem";
+			this.removeFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.removeFolderToolStripMenuItem.Text = "Remove Fo&lder";
+			this.removeFolderToolStripMenuItem.Click += new System.EventHandler(this.RemoveFolderButton_Click);
+			// 
+			// sep1
+			// 
+			this.sep1.Name = "sep1";
+			this.sep1.Size = new System.Drawing.Size(177, 6);
+			// 
+			// addFileToolStripMenuItem
+			// 
+			this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
+			this.addFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.addFileToolStripMenuItem.Text = "Add F&ile...";
+			this.addFileToolStripMenuItem.Click += new System.EventHandler(this.FileBrowserButton_Click);
+			// 
+			// removeFileToolStripMenuItem
+			// 
+			this.removeFileToolStripMenuItem.Name = "removeFileToolStripMenuItem";
+			this.removeFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.removeFileToolStripMenuItem.Text = "Re&move File";
+			this.removeFileToolStripMenuItem.Click += new System.EventHandler(this.RemoveFilesButton_Click);
 			// 
 			// MainForm
 			// 
@@ -535,14 +651,14 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(875, 527);
 			this.Controls.Add(this.MainToolStripContainer);
-			this.Controls.Add(this.MainMenuStrip);
+			this.Controls.Add(this.MainMenu);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Contig UI";
-			this.MainMenuStrip.ResumeLayout(false);
-			this.MainMenuStrip.PerformLayout();
+			this.MainMenu.ResumeLayout(false);
+			this.MainMenu.PerformLayout();
 			this.MainToolStripContainer.ContentPanel.ResumeLayout(false);
 			this.MainToolStripContainer.TopToolStripPanel.ResumeLayout(false);
 			this.MainToolStripContainer.TopToolStripPanel.PerformLayout();
@@ -554,6 +670,10 @@
 			this.MainContainer.ResumeLayout(false);
 			this.OptionsTabControl.ResumeLayout(false);
 			this.DiskTabPage.ResumeLayout(false);
+			this.driveSplitContainer.Panel1.ResumeLayout(false);
+			this.driveSplitContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.driveSplitContainer)).EndInit();
+			this.driveSplitContainer.ResumeLayout(false);
 			this.FolderTabPage.ResumeLayout(false);
 			this.FoldersSplitContainer.Panel1.ResumeLayout(false);
 			this.FoldersSplitContainer.Panel2.ResumeLayout(false);
@@ -566,16 +686,13 @@
 			this.FilesSplitContainer.ResumeLayout(false);
 			this.MainToolStrip.ResumeLayout(false);
 			this.MainToolStrip.PerformLayout();
-			this.driveSplitContainer.Panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.driveSplitContainer)).EndInit();
-			this.driveSplitContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.MenuStrip MainMenuStrip;
+        private System.Windows.Forms.MenuStrip MainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -588,7 +705,7 @@
 		private System.Windows.Forms.TabControl OptionsTabControl;
 		private System.Windows.Forms.TabPage DiskTabPage;
 		private System.Windows.Forms.ListView DriveListView;
-		private System.Windows.Forms.ColumnHeader DriveNameCOlumnHeader;
+		private System.Windows.Forms.ColumnHeader DriveNameColumnHeader;
 		private System.Windows.Forms.ColumnHeader DriveSizeColumnHeader;
 		private System.Windows.Forms.TabPage FolderTabPage;
 		private System.Windows.Forms.SplitContainer FoldersSplitContainer;
@@ -611,6 +728,17 @@
 		private System.Windows.Forms.ToolStripButton ExitStripButton;
 		private System.Windows.Forms.SplitContainer driveSplitContainer;
 		private System.Windows.Forms.ProgressBar progressIndicator;
+		private System.Windows.Forms.ListView driveLogListView;
+		private System.Windows.Forms.ColumnHeader DriveTypeColumnHeader;
+		private System.Windows.Forms.ColumnHeader ItemColumnHeader;
+		private System.Windows.Forms.ColumnHeader BeforeColumnHeader;
+		private System.Windows.Forms.ColumnHeader AfterColumnHeader;
+		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addFolderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem removeFolderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator sep1;
+		private System.Windows.Forms.ToolStripMenuItem addFileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem removeFileToolStripMenuItem;
 	}
 }
 

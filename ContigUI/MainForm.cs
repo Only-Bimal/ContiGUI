@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ContigUI.Utilities;
 
@@ -24,7 +15,7 @@ namespace ContigUI
 		{
 			InitializeComponent();
 #if DEBUG == false
-			RunAsAdmin();
+			AdminModule.RunAsAdmin();
 #endif
 			DriveListView.Items.Clear();
 			FolderListView.Items.Clear();
@@ -33,45 +24,77 @@ namespace ContigUI
 			AddDrives();
 		}
 
+		private string _logFilePath;
+		private string LogFilePath
+		{
+			get
+			{
+				if (!string.IsNullOrWhiteSpace(_logFilePath)) { return _logFilePath; }
+
+				var outDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "ContigUI"));
+
+				var logFileName = $"ContigUi {DateTime.Now.ToString("yyyy-MMM-dd", CultureInfo.CurrentCulture)}.log";
+
+				_logFilePath = Path.Combine(outDir.FullName, logFileName);
+
+				if (File.Exists(_logFilePath)) { File.Delete(_logFilePath); }
+				return _logFilePath;
+			}
+		}
+
+		private OutputAnalyzer _logWatcher;
+		private OutputAnalyzer Watcher
+		{
+			get
+			{
+				if (_logWatcher != null) { return _logWatcher; }
+
+				_logWatcher = new OutputAnalyzer(LogFilePath);
+				return _logWatcher;
+			}
+		}
 		#region Add Items to defrag
 
 		private void AddDrives()
 		{
 			DriveListView.Items.Clear();
 
-			var drives = System.IO.DriveInfo.GetDrives();
+			var drives = Drive.GetDrives();
+
 			foreach (var drive in drives)
 			{
-				if (drive.DriveType != System.IO.DriveType.Fixed) { continue; }
-				var item = new ListViewItem(drive.Name, "Drive");
-				var subItem = new ListViewItem.ListViewSubItem(item, (drive.TotalSize / 1024 / 1024 / 1024) + " GB");
-				item.SubItems.Add(subItem);
+				var item = new ListViewItem($"{drive.DriveLabel} ({drive.DriveLetter})", "Drive")
+				{
+					Tag = drive.DriveLetter
+				};
+
+				var typeSubItem = new ListViewItem.ListViewSubItem(item, (drive.DriveType.ToString()));
+				item.SubItems.Add(typeSubItem);
+				var sizeSubItem = new ListViewItem.ListViewSubItem(item, drive.DriveSize);
+				item.SubItems.Add(sizeSubItem);
 				DriveListView.Items.Add(item);
 			}
 		}
 
 		private void FolderBrowserButton_Click(object sender, EventArgs e)
 		{
-			if (FolderDialog.ShowDialog() == DialogResult.OK)
-			{
-				var folderName = FolderDialog.SelectedPath;
-				var item = new ListViewItem(folderName, "Folder");
-				//item.Checked = true;
-				FolderListView.Items.Add(item);
-			}
+			if (FolderDialog.ShowDialog() != DialogResult.OK) { return; }
+
+			var folderName = FolderDialog.SelectedPath;
+			var item = new ListViewItem(folderName, "Folder");
+			FolderListView.Items.Add(item);
 		}
 
 		private void FileBrowserButton_Click(object sender, EventArgs e)
 		{
-			if (FileDialog.ShowDialog() == DialogResult.OK)
+			if (FileDialog.ShowDialog() != DialogResult.OK) { return; }
+
+			var files = FileDialog.FileNames;
+			foreach (var file in files)
 			{
-				var files = FileDialog.FileNames;
-				foreach (var file in files)
-				{
-					var item = new ListViewItem(file, "File");
-					//item.Checked = true;
-					FileListView.Items.Add(item);
-				}
+				var item = new ListViewItem(file, "File");
+				//item.Checked = true;
+				FileListView.Items.Add(item);
 			}
 		}
 
@@ -108,6 +131,8 @@ namespace ContigUI
 			var result = MessageBox.Show("Are you sure to exit the program?\n\n Defragmantation (if started) will continue in the background.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button2);
 			if (result == DialogResult.OK)
 			{
+				Watcher.Stop();
+				Watcher.Dispose();
 				Close();
 			}
 		}
@@ -117,62 +142,76 @@ namespace ContigUI
 			var contigPath = GetContigPath();
 			if (string.IsNullOrWhiteSpace(contigPath)) { return; }
 
-			var outDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "ContiGUI"));
-
-			var driveFileName = Path.Combine(Path.GetTempPath(), "ContigUI", "driveOut.log");
-			var folderFileName = Path.Combine(Path.GetTempPath(), "ContigUI", "folderOut.log");
-			var fileFileName = Path.Combine(Path.GetTempPath(), "ContigUI", "fileOut.log");
-
 			var process = new ProcessUtility(contigPath);
 
-			var driveParameters = new List<string>();
-			var folderParameters = new List<string>();
-			var fileParameters = new List<string>();
+			var driveParameters = (from ListViewItem item in DriveListView.Items where item.Checked select item.Tag.ToString()).ToList();
 
-			foreach (ListViewItem item in DriveListView.Items)
-			{
-				if (item.Checked) { driveParameters.Add(item.Text); }
-			}
-			foreach (ListViewItem item in FolderListView.Items)
-			{
-				folderParameters.Add(item.Text);
-			}
+			var folderParameters = (from ListViewItem item in FolderListView.Items select item.Text).ToList();
 
-			foreach (ListViewItem item in FileListView.Items)
-			{
-				fileParameters.Add(item.Text);
-			}
+			var fileParameters = (from ListViewItem item in FileListView.Items select item.Text).ToList();
 
+			// Start Watching Log
+			Watcher.Start();
 			//Hide();
 			foreach (var folder in folderParameters)
 			{
 				process.Arguments = "-v -s " + Path.Combine(folder, "*.*");
-				//process.StandardErrorFileName = folderFileName;
-				process.StandardOutputFileName = folderFileName;
-				//new ProgressDialog().ShowDialog(this);
+				process.StandardOutputFileName = LogFilePath;
+				process.ProcessCompleted += Process_ProcessCompleted;
 				process.Run();
 			}
 
 			foreach (var file in fileParameters)
 			{
 				process.Arguments = "-v -s " + file;
-				//process.StandardErrorFileName = fileFileName;
-				process.StandardOutputFileName = fileFileName;
+				process.StandardOutputFileName = LogFilePath;
 				process.Run();
 			}
 
 			foreach (var drive in driveParameters)
 			{
 				process.Arguments = "-v -s " + drive + "*.*";
-				//process.StandardErrorFileName = driveFileName;
-				process.StandardOutputFileName = driveFileName;
+				process.StandardOutputFileName = LogFilePath;
 				process.Run();
 			}
+			// Stop Watching Log
+			//Watcher.Stop();
 
-			MessageBox.Show("Process Complete", "ContiGUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			//MessageBox.Show("Process Complete", "ContigUI", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			//Show();
 		}
 
-		
+		private void Process_ProcessCompleted(object sender, EventArgs e)
+		{
+			MessageBox.Show(OutputAnalyzer.Count.ToString());
+		}
+
+		#region Toolbar Orientation
+
+		private void MainToolStripContainer_LeftToolStripPanel_ControlAdded(object sender, ControlEventArgs e)
+		{
+			SetToolbarOrientation((ToolStrip)e.Control, ToolStripTextDirection.Vertical270);
+		}
+
+		private void MainToolStripContainer_RightToolStripPanel_ControlAdded(object sender, ControlEventArgs e)
+		{
+			SetToolbarOrientation((ToolStrip)e.Control, ToolStripTextDirection.Vertical90);
+		}
+
+		private void MainToolStripContainer_TopToolStripPanel_ControlAdded(object sender, ControlEventArgs e)
+		{
+			SetToolbarOrientation((ToolStrip)e.Control, ToolStripTextDirection.Horizontal);
+		}
+
+		private void MainToolStripContainer_BottomToolStripPanel_ControlAdded(object sender, ControlEventArgs e)
+		{
+			SetToolbarOrientation((ToolStrip)e.Control, ToolStripTextDirection.Horizontal);
+		}
+
+		private void SetToolbarOrientation(ToolStrip toolBar, ToolStripTextDirection textDirection)
+		{
+			toolBar.TextDirection = textDirection;
+		}
+		#endregion
 	}
 }
